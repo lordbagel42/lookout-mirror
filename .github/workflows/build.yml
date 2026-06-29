@@ -57,11 +57,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Restart Nomad lookout job via oracle
-        uses: appleboy/ssh-action@v1
+      - name: Trigger Nomad restart via pulumi-homelab
+        uses: peter-evans/repository-dispatch@v3
         with:
-          host: ${{ secrets.ORACLE_HOST }}
-          username: ${{ secrets.ORACLE_USER }}
-          key: ${{ secrets.ORACLE_SSH_KEY }}
-          script: |
-            nomad job restart -address=http://192.168.0.202:4646 lookout
+          token: ${{ secrets.PULUMI_HOMELAB_DISPATCH_TOKEN }}
+          repository: lordbagel42/pulumi-homelab
+          event-type: nomad-restart-lookout
